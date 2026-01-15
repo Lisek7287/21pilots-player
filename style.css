@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  background: #0b0b0b;
+  color: #eee;
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 300px 1fr 400px;
+  height: 100vh;
+}
+
+.albums, .player {
+  padding: 16px;
+  background: #111;
+}
+
+.content {
+  padding: 20px;
+}
+
+.album {
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.album:hover {
+  background: #1a1a1a;
+}
+
+.track {
+  padding: 6px;
+  cursor: pointer;
+}
+
+.track:hover {
+  background: #222;
+}
+
+.tabs button {
+  margin-right: 8px;
+}
+
+.hidden {
+  display: none;
+}
+
+#lyrics div {
+  padding: 4px 0;
+  color: #aaa;
+}
