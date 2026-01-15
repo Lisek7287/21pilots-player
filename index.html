@@ -23,7 +23,6 @@
       </header>
 
       <div id="albumsGridWrap" class="albums-grid-wrap">
-        <!-- wrapper so topbar is not inside scroll context -->
         <div id="albumsGrid" class="albums-grid" role="list" aria-label="Lista albumów"></div>
       </div>
 
@@ -107,9 +106,7 @@
           <div id="lyrics" class="tab-content" aria-live="polite"></div>
 
           <div id="resumeAuto" class="resume hidden" aria-hidden="true">
-            <!-- ikonowy przycisk zamiast napisu -->
             <button id="resumeBtn" class="btn icon-btn" title="Przywróć autoscroll" aria-label="Przywróć autoscroll">
-              <!-- small SVG icon (centered arrow) -->
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M12 6v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M9 9l3-3 3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -125,7 +122,7 @@
       <audio id="audio" preload="metadata"></audio>
     </section>
 
-    <!-- MINI PLAYER bar (visible kiedy wychodzisz z playera lub zawsze dolny gdy gra) -->
+    <!-- MINI PLAYER bar -->
     <div id="miniPlayer" class="mini-player hidden" role="region" aria-label="Mini player - kliknij, by otworzyć">
       <div class="mini-left" id="miniLeft">
         <img id="miniThumb" src="covers/placeholder.png" alt="" />
@@ -135,8 +132,11 @@
         </div>
       </div>
       <div class="mini-controls">
+        <button id="miniPrev" class="btn icon-btn" title="Prev">⏮</button>
         <button id="miniPlay" class="btn icon-btn" title="Play/Pause">▶️</button>
         <button id="miniNext" class="btn icon-btn" title="Next">⏭</button>
+        <button id="miniLike" class="btn icon-btn" title="Like">♡</button>
+        <button id="miniOpen" class="btn icon-btn" title="Open">⬆</button>
       </div>
     </div>
 
