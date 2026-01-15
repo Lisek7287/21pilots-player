@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Music Player</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="albums">
+    <input id="search" placeholder="Szukaj albumu lub piosenki">
+    <select id="sort">
+      <option value="title">A–Z</option>
+      <option value="year">Rok wydania</option>
+    </select>
+    <div id="albumList"></div>
+  </aside>
+
+  <main class="content">
+    <div id="albumView">Wybierz album</div>
+  </main>
+
+  <section class="player">
+    <div id="nowPlaying">Nic nie gra</div>
+
+    <div class="tabs">
+      <button data-tab="queue">Kolejka</button>
+      <button data-tab="lyrics">Tekst</button>
+    </div>
+
+    <div id="queue" class="tab-content"></div>
+    <div id="lyrics" class="tab-content hidden"></div>
+
+    <audio id="audio" controls></audio>
+  </section>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
