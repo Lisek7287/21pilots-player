@@ -29,13 +29,21 @@ html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-famil
 }
 .view.active{ opacity:1; transform:none; pointer-events:auto; }
 
+/* album cover fill */
+.track-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+}
+
 /* topbar */
 .topbar{ display:flex; align-items:center; gap:12px; margin-bottom:12px; position:relative; z-index:20; background:linear-gradient(180deg, rgba(11,11,11,0.55), rgba(11,11,11,0.35)); padding:10px; border-radius:10px; }
 .view-header h1{ margin:0; font-weight:600; font-size:18px; }
 .controls{ margin-left:auto; display:flex; gap:8px; align-items:center; }
 
 /* albums lower */
-.albums-grid-wrap{ margin-top:20px; height:calc(100% - 100px); overflow:auto; padding:6px; border-radius:10px; }
+.albums-grid-wrap{ margin-top:50px; height:calc(100% - 100px); overflow:auto; padding:6px; border-radius:10px; }
 
 /* grid */
 .albums-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; align-items:start; }

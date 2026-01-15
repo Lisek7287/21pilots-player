@@ -16,7 +16,7 @@ let settings = {
   volume: Number(localStorage.getItem('volume') ?? 0.9),
   shuffle: localStorage.getItem('shuffle') === 'true',
   loop: localStorage.getItem('loop') === 'true',
-  autoFollow: localStorage.getItem('autoFollow') === 'true' || true
+  autoFollow: localStorage.getItem('autoFollow') !== 'false'
 };
 
 // ELEMENTS
@@ -496,7 +496,7 @@ function applyFilters(){
     return false;
   });
   if(sortBy === 'title') filtered.sort((a,b)=> a.title.localeCompare(b.title));
-  if(sortBy === 'year') filtered.sort((a,b)=> (b.year||0) - (a.year||0));
+  if(sortBy === 'year') filtered.sort((a, b) => a.year - b.year);
   renderAlbumsFilteredWithLiked(filtered);
 }
 function renderAlbumsFilteredWithLiked(filtered){
@@ -628,16 +628,6 @@ tabBtns.forEach(btn => btn.addEventListener('click', ()=> {
   document.getElementById(target).classList.remove('hidden');
   if(target === 'queue') renderQueue();
 }));
-
-// helpers: preload
-function preloadNextTrack(){
-  try{
-    const idx = queue.findIndex(t => t.id === (currentTrack && currentTrack.id));
-    const next = (idx >= 0 && idx < queue.length - 1) ? queue[idx+1] : null;
-    if(!next) return;
-    const link = document.createElement('link'); link.rel = 'preload'; link.as = 'audio'; link.href = next.audio; document.head.appendChild(link);
-  }catch(e){}
-}
 
 // simple search render on init
 document.addEventListener('DOMContentLoaded', ()=>{});
