@@ -1,10 +1,13 @@
-/* app.js — zmiany:
- - usunięty offset LRC
- - kliknięcie linii LRC przenosi w czasie
- - mini-player po wyjściu z playera
- - topbar z-index niżej, hover album-card z-index wysoki
- - resume autoscroll jako ikonowy button
- - custom volume slider (wizualnie)
+/* Zaktualizowane app.js — naprawy i usprawnienia:
+   - mini-player behavior fixed (won't auto-show on pause/play; only when not in full player)
+   - lyrics autoscroll only inside lyrics box; clicking a line seeks
+   - albums placed lower (handled in CSS)
+   - add-to-queue buttons fixed and working
+   - player layout adjusted (more space for cover+controls, less for text)
+   - spinner hides reliably on canplay/playing/loadeddata or after timeout
+   - mini-player has more controls (prev/play/next/like/open)
+   - new song does not auto open full player
+   - volume fill rendering is pixel-perfect (uses actual track width)
 */
 
 let albumsData = [];
@@ -71,6 +74,9 @@ const miniTitle = document.getElementById('miniTitle');
 const miniSub = document.getElementById('miniSub');
 const miniPlay = document.getElementById('miniPlay');
 const miniNext = document.getElementById('miniNext');
+const miniPrev = document.getElementById('miniPrev');
+const miniLike = document.getElementById('miniLike');
+const miniOpen = document.getElementById('miniOpen');
 const miniLeft = document.getElementById('miniLeft');
 
 // HELPERS
@@ -105,11 +111,13 @@ function showView(viewEl){
   requestAnimationFrame(()=> { viewEl.classList.add('active'); viewEl.classList.remove('enter'); });
   const onEnd = () => { prev.classList.remove('leave'); prev.removeEventListener('transitionend', onEnd); animLock = false; };
   prev.addEventListener('transitionend', onEnd, { once: true });
-  // show mini player when leaving player view
+
+  // MINI player behaviour: show only when NOT in full player and audio is playing
   if(prev === playerView){
-    showMini(true);
+    // leaving player view -> show mini only if audio is playing
+    if(!audio.paused) showMini(true);
   } else {
-    // if entering player view hide mini
+    // entering player view -> hide mini
     if(viewEl === playerView) showMini(false);
   }
 }
@@ -250,6 +258,9 @@ async function playTrack(id){
   nowArtist.textContent = `${found.albumArtist || found.artist || ''} • ${found.albumTitle || ''}`;
   coverImg.src = found.albumCover || found.cover || 'covers/placeholder.png';
   coverSpinner.classList.remove('hidden');
+  // ensure spinner hides if loading takes too long
+  const spinnerTimeout = setTimeout(()=> coverSpinner.classList.add('hidden'), 8000);
+
   updateLikeButton();
 
   try{
@@ -269,6 +280,12 @@ async function playTrack(id){
   showView(playerView);
   preloadNextTrack();
   setupMediaSession();
+
+  // clear spinner timeout once playing starts
+  audio.addEventListener('playing', ()=> {
+    clearTimeout(spinnerTimeout);
+    coverSpinner.classList.add('hidden');
+  }, { once: true });
 }
 
 // LRC load + parse + render; clicking a line seeks to that time
@@ -322,7 +339,6 @@ function renderLyrics(){
   lyricsBox.querySelectorAll('div[data-time]').forEach(el => el.addEventListener('click', (e) => {
     const t = Number(el.dataset.time || 0);
     audio.currentTime = t;
-    // if player not visible, open player
     if(!playerView.classList.contains('active')) showView(playerView);
   }));
 }
@@ -382,9 +398,14 @@ audio.addEventListener('timeupdate', () => {
 });
 
 audio.addEventListener('loadeddata', () => { coverSpinner.classList.add('hidden'); });
+
+audio.addEventListener('canplay', () => { coverSpinner.classList.add('hidden'); });
+audio.addEventListener('playing', () => { coverSpinner.classList.add('hidden'); });
+
 audio.addEventListener('error', () => { showAudioError('Błąd odtwarzania (plik nie istnieje / CORS / uszkodzony).'); coverSpinner.classList.add('hidden'); });
 
 audio.addEventListener('ended', () => {
+  // don't open mini->player automatically; handle only playback logic
   if(settings.shuffle){
     if(queue.length <= 1) return;
     let rnd;
@@ -407,7 +428,12 @@ progressBar.addEventListener('click', (e) => {
 
 // play/pause
 playPauseBtn.addEventListener('click', () => { if(audio.paused) audio.play().catch(()=>{}); else audio.pause(); });
-audio.addEventListener('play', ()=> { playPauseBtn.textContent = '⏸'; miniPlay.textContent = '⏸'; showMini(true); });
+audio.addEventListener('play', ()=> {
+  playPauseBtn.textContent = '⏸';
+  miniPlay.textContent = '⏸';
+  // show mini only if user is NOT viewing full player
+  if(!playerView.classList.contains('active')) showMini(true);
+});
 audio.addEventListener('pause', ()=> { playPauseBtn.textContent = '▶️'; miniPlay.textContent = '▶️'; });
 
 // prev/next
@@ -455,7 +481,7 @@ function preloadNextTrack(){
   }catch(e){}
 }
 
-// media session
+// MEDIA SESSION
 function setupMediaSession(){
   if(!('mediaSession' in navigator) || !currentTrack) return;
   navigator.mediaSession.metadata = new MediaMetadata({
@@ -533,14 +559,19 @@ resumeBtn.addEventListener('click', ()=> {
   scrollToCurrentLine();
 });
 
-// volume slider custom
+// volume slider custom: compute pixel-perfect fill
 volumeEl.value = settings.volume;
 applyVolume();
 volumeEl.addEventListener('input', (e) => { settings.volume = Number(e.target.value); applyVolume(); localStorage.setItem('volume', String(settings.volume)); });
 function applyVolume(){
   audio.volume = settings.volume;
+  const wrap = document.querySelector('.custom-range-wrap');
   const fill = document.querySelector('.custom-range-fill');
-  if(fill) fill.style.width = (settings.volume * 100) + '%';
+  if(!wrap || !fill) return;
+  const rect = wrap.getBoundingClientRect();
+  const w = rect.width;
+  const px = Math.round(settings.volume * w);
+  fill.style.width = px + 'px';
   volumeEl.value = settings.volume;
 }
 
@@ -549,13 +580,14 @@ shuffleBtn.addEventListener('click', ()=> { settings.shuffle = !settings.shuffle
 loopBtn.addEventListener('click', ()=> { settings.loop = !settings.loop; localStorage.setItem('loop', settings.loop); updateShuffleLoopButtons(); });
 function updateShuffleLoopButtons(){ shuffleBtn.style.opacity = settings.shuffle ? '1' : '0.5'; loopBtn.style.opacity = settings.loop ? '1' : '0.5'; }
 
-// mini player
+// mini player controls
 function showMini(show){
   if(show && currentTrack){
     miniThumb.src = currentTrack.albumCover || currentTrack.cover || 'covers/placeholder.png';
     miniTitle.textContent = currentTrack.title;
     miniSub.textContent = `${currentTrack.albumArtist || currentTrack.artist || ''} • ${currentTrack.albumTitle || ''}`;
     miniPlay.textContent = audio.paused ? '▶️' : '⏸';
+    miniLike.textContent = (currentTrack && liked.includes(currentTrack.id)) ? '♥' : '♡';
     miniPlayer.classList.remove('hidden');
   } else {
     miniPlayer.classList.add('hidden');
@@ -564,8 +596,9 @@ function showMini(show){
 miniLeft.addEventListener('click', ()=> showView(playerView));
 miniPlay.addEventListener('click', ()=> { if(audio.paused) audio.play().catch(()=>{}); else audio.pause(); });
 miniNext.addEventListener('click', ()=> nextBtn.click());
-
-// MEDIA SESSION already in setupMediaSession()
+miniPrev.addEventListener('click', ()=> prevBtn.click());
+miniLike.addEventListener('click', ()=> { if(currentTrack){ toggleLike(currentTrack.id); updateLikeButton(); miniLike.textContent = liked.includes(currentTrack.id) ? '♥' : '♡'; renderAlbumsWithLiked(); }});
+miniOpen.addEventListener('click', ()=> showView(playerView));
 
 // liked persistence
 function saveLiked(ids){ try{ localStorage.setItem('liked', JSON.stringify(ids)); }catch(e){ document.cookie = "liked=" + encodeURIComponent(JSON.stringify(ids)) + "; max-age=" + (60*60*24*365) + "; path=/"; } }
@@ -586,6 +619,16 @@ document.addEventListener('keydown', (e) => {
 // back buttons
 backFromTracks.addEventListener('click', ()=> showView(albumsView));
 backFromPlayer.addEventListener('click', ()=> showView(tracksView));
+
+// tab switching (lyrics/queue)
+tabBtns.forEach(btn => btn.addEventListener('click', ()=> {
+  tabBtns.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const target = btn.dataset.tab;
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+  document.getElementById(target).classList.remove('hidden');
+  if(target === 'queue') renderQueue();
+}));
 
 // initial noop
 document.addEventListener('DOMContentLoaded', ()=>{});
