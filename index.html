@@ -1,63 +1,108 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>Music Player</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Music Player — dopieszczony</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div id="app" class="app">
 
-<div class="app">
+    <!-- VIEW: ALBUMY -->
+    <section id="albumsView" class="view active" aria-label="Widok albumów">
+      <header class="view-header">
+        <h1>Albumy</h1>
+        <div class="controls">
+          <input id="search" type="search" placeholder="Szukaj albumu lub piosenki..." aria-label="Szukaj">
+          <select id="sort" aria-label="Sortuj">
+            <option value="title">A → Z</option>
+            <option value="year">Rok wydania</option>
+          </select>
+        </div>
+      </header>
 
-  <!-- ALBUMY -->
-  <section id="albumsView" class="view active">
-    <header>
-      <h1>Albumy</h1>
-      <input type="text" id="search" placeholder="Szukaj albumu lub piosenki">
-    </header>
-    <div id="albums" class="albums-grid"></div>
-  </section>
+      <div id="albumsGrid" class="albums-grid" role="list" aria-label="Lista albumów"></div>
 
-  <!-- PIOSENKI -->
-  <section id="tracksView" class="view">
-    <header>
-      <button class="back">←</button>
-      <h2 id="albumTitle"></h2>
-    </header>
-    <ul id="tracks"></ul>
-  </section>
+      <div id="errorMsg" class="error hidden" role="alert"></div>
+    </section>
 
-  <!-- PLAYER -->
-  <section id="playerView" class="view">
-    <header>
-      <button class="back">←</button>
-    </header>
+    <!-- VIEW: PIOSENKI W ALBUMIE -->
+    <section id="tracksView" class="view" aria-label="Lista piosenek">
+      <header class="view-header">
+        <button id="backFromTracks" class="back btn" aria-label="Wstecz">←</button>
+        <div>
+          <h2 id="albumTitle">Album</h2>
+          <div id="albumMeta" class="muted"></div>
+        </div>
+      </header>
 
-    <div class="player">
-      <img id="cover">
-      <h3 id="title"></h3>
+      <main class="tracks-container">
+        <div class="album-cover-small" id="tracksCover"><img id="tracksCoverImg" src="" alt=""></div>
+        <div id="tracksList" class="tracks-list" role="list"></div>
+      </main>
+    </section>
 
-      <div class="progress">
-        <i></i>
-      </div>
+    <!-- VIEW: PLAYER -->
+    <section id="playerView" class="view" aria-label="Odtwarzacz">
+      <header class="view-header">
+        <button id="backFromPlayer" class="back btn" aria-label="Wstecz">←</button>
+        <div>
+          <h2 id="playerAlbumTitle">Odtwarzacz</h2>
+          <div id="playerAlbumMeta" class="muted"></div>
+        </div>
+      </header>
 
-      <div class="controls">
-        <button id="play">⏯</button>
-      </div>
+      <main class="player-main">
+        <div class="player-left">
+          <div id="playerCover" class="player-cover">
+            <img id="coverImg" src="" alt="">
+            <div id="coverSpinner" class="spinner hidden" aria-hidden="true"></div>
+          </div>
 
-      <div class="tabs">
-        <button data-tab="lyrics">Tekst</button>
-        <button data-tab="queue">Kolejka</button>
-      </div>
+          <div class="player-meta">
+            <h3 id="nowTitle">Nic nie gra</h3>
+            <div id="nowArtist" class="muted">—</div>
 
-      <div id="lyrics" class="tab active"></div>
-      <div id="queue" class="tab"></div>
-    </div>
-  </section>
+            <div id="progressBar" class="progress" role="progressbar" tabindex="0" aria-label="Postęp odtwarzania">
+              <i class="progress-fill"></i>
+              <div class="scrubber" id="scrubber" aria-hidden="true"></div>
+            </div>
 
-</div>
+            <div class="controls-row">
+              <button id="prevBtn" class="btn" title="Poprzedni">⏮</button>
+              <button id="playPauseBtn" class="btn" title="Odtwórz/Pauza">▶️</button>
+              <button id="nextBtn" class="btn" title="Następny">⏭</button>
+              <button id="likeBtn" class="btn" title="Polub">♡</button>
+              <div class="time muted">
+                <span id="curTime">0:00</span> / <span id="durTime">0:00</span>
+              </div>
+            </div>
 
-<audio id="audio"></audio>
-<script src="app.js"></script>
+            <div class="lrc-offset">
+              <label for="lrcOffset">Offset LRC: <span id="offsetVal">0 ms</span></label>
+              <input id="lrcOffset" type="range" min="-2000" max="2000" step="50" />
+            </div>
+          </div>
+        </div>
+
+        <div class="player-right">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="lyrics">Tekst</button>
+            <button class="tab-btn" data-tab="queue">Kolejka</button>
+          </div>
+
+          <div id="lyrics" class="tab-content" aria-live="polite"></div>
+          <div id="queue" class="tab-content hidden"></div>
+        </div>
+      </main>
+
+      <div id="audioError" class="error hidden" role="alert"></div>
+      <audio id="audio" preload="metadata"></audio>
+    </section>
+
+  </div>
+
+  <script src="app.js" defer></script>
 </body>
 </html>
