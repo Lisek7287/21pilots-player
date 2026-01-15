@@ -1,13 +1,5 @@
-/* Zaktualizowane app.js — naprawy i usprawnienia:
-   - mini-player behavior fixed (won't auto-show on pause/play; only when not in full player)
-   - lyrics autoscroll only inside lyrics box; clicking a line seeks
-   - albums placed lower (handled in CSS)
-   - add-to-queue buttons fixed and working
-   - player layout adjusted (more space for cover+controls, less for text)
-   - spinner hides reliably on canplay/playing/loadeddata or after timeout
-   - mini-player has more controls (prev/play/next/like/open)
-   - new song does not auto open full player
-   - volume fill rendering is pixel-perfect (uses actual track width)
+/* Final update: mini controls (seek + volume), removed spinner, improved layout, fixed autoscroll detection.
+   Key flags: isAutoScrolling prevents auto-follow being considered user scroll.
 */
 
 let albumsData = [];
@@ -18,6 +10,8 @@ let lyrics = [];
 let liked = loadLiked();
 let animLock = false;
 let currentLrcController = null;
+let isAutoScrolling = false; // IMPORTANT: prevents programmatic scroll from being treated as user scroll
+
 let settings = {
   volume: Number(localStorage.getItem('volume') ?? 0.9),
   shuffle: localStorage.getItem('shuffle') === 'true',
@@ -26,10 +20,6 @@ let settings = {
 };
 
 // ELEMENTS
-const albumsView = document.getElementById('albumsView');
-const tracksView = document.getElementById('tracksView');
-const playerView = document.getElementById('playerView');
-
 const albumsGrid = document.getElementById('albumsGrid');
 const errorMsg = document.getElementById('errorMsg');
 
@@ -41,7 +31,6 @@ const tracksList = document.getElementById('tracksList');
 const tracksCoverImg = document.getElementById('tracksCoverImg');
 
 const coverImg = document.getElementById('coverImg');
-const coverSpinner = document.getElementById('coverSpinner');
 const nowTitle = document.getElementById('nowTitle');
 const nowArtist = document.getElementById('nowArtist');
 const progressBar = document.getElementById('progressBar');
@@ -76,10 +65,12 @@ const miniPlay = document.getElementById('miniPlay');
 const miniNext = document.getElementById('miniNext');
 const miniPrev = document.getElementById('miniPrev');
 const miniLike = document.getElementById('miniLike');
-const miniOpen = document.getElementById('miniOpen');
 const miniLeft = document.getElementById('miniLeft');
+const miniProgress = document.getElementById('miniProgress');
+const miniProgressFill = document.getElementById('miniProgressFill');
+const miniVolume = document.getElementById('miniVolume');
 
-// HELPERS
+// UTIL
 const escapeHtml = s => String(s || '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 function fmtTime(s){ if(!isFinite(s)) return '0:00'; const m = Math.floor(s/60); const sec = Math.floor(s%60).toString().padStart(2,'0'); return `${m}:${sec}`; }
 function debounce(fn, ms=200){ let t; return (...a)=>{ clearTimeout(t); t = setTimeout(()=>fn(...a), ms); }; }
@@ -96,11 +87,11 @@ function debounce(fn, ms=200){ let t; return (...a)=>{ clearTimeout(t); t = setT
     updateShuffleLoopButtons();
   } catch(e){
     console.error(e);
-    showError('Błąd ładowania danych. Sprawdź ścieżki i serwer (uruchom: python -m http.server).');
+    showError('Błąd ładowania danych. Uruchom serwer (python -m http.server) lub sprawdź ścieżki.');
   }
 })();
 
-// VIEW switching
+// VIEW switch (keeps mini-player behavior: show only when leaving full player and audio plays)
 function showView(viewEl){
   if(animLock) return;
   animLock = true;
@@ -112,17 +103,14 @@ function showView(viewEl){
   const onEnd = () => { prev.classList.remove('leave'); prev.removeEventListener('transitionend', onEnd); animLock = false; };
   prev.addEventListener('transitionend', onEnd, { once: true });
 
-  // MINI player behaviour: show only when NOT in full player and audio is playing
-  if(prev === playerView){
-    // leaving player view -> show mini only if audio is playing
+  if(prev.id === 'playerView'){
     if(!audio.paused) showMini(true);
   } else {
-    // entering player view -> hide mini
-    if(viewEl === playerView) showMini(false);
+    if(viewEl.id === 'playerView') showMini(false);
   }
 }
 
-// RENDER ALBUMS (with liked aggregate)
+// RENDER ALBUMS
 function renderAlbumsWithLiked(){
   const likedTracks = [];
   liked.forEach(id => {
@@ -160,7 +148,7 @@ function renderAlbumsWithLiked(){
   });
 }
 
-// OPEN album
+// OPEN ALBUM
 function openAlbum(album){
   currentAlbum = album;
   albumTitle.textContent = album.title;
@@ -190,10 +178,10 @@ function openAlbum(album){
     div.addEventListener('click', ()=> playTrack(track.id));
     tracksList.appendChild(div);
   });
-  showView(tracksView);
+  showView(document.getElementById('tracksView'));
 }
 
-// addToQueue
+// ADD TO QUEUE
 function addToQueueById(trackId){
   let sourceId = trackId;
   if(trackId.startsWith('liked-')) sourceId = trackId.replace('liked-','');
@@ -207,7 +195,7 @@ function addToQueueById(trackId){
   renderQueue();
 }
 
-// render queue with mini thumbs
+// RENDER QUEUE
 function renderQueue(){
   queueBox.innerHTML = '';
   if(!queue.length){ queueBox.innerHTML = '<div class="muted">Kolejka pusta</div>'; return; }
@@ -231,7 +219,7 @@ function renderQueue(){
   queueBox.querySelectorAll('.q-remove').forEach(b => b.addEventListener('click', ()=> { queue.splice(Number(b.dataset.idx),1); renderQueue(); }));
 }
 
-// play queue index
+// PLAY QUEUE INDEX
 function playQueueIndex(idx){
   const t = queue[idx];
   if(!t) return;
@@ -239,7 +227,7 @@ function playQueueIndex(idx){
   playTrack(t.id || t.sourceId || t.id);
 }
 
-// play track
+// PLAY TRACK
 async function playTrack(id){
   let sourceId = id;
   if(id.startsWith && id.startsWith('liked-')) sourceId = id.replace('liked-','');
@@ -257,10 +245,6 @@ async function playTrack(id){
   nowTitle.textContent = found.title;
   nowArtist.textContent = `${found.albumArtist || found.artist || ''} • ${found.albumTitle || ''}`;
   coverImg.src = found.albumCover || found.cover || 'covers/placeholder.png';
-  coverSpinner.classList.remove('hidden');
-  // ensure spinner hides if loading takes too long
-  const spinnerTimeout = setTimeout(()=> coverSpinner.classList.add('hidden'), 8000);
-
   updateLikeButton();
 
   try{
@@ -277,18 +261,14 @@ async function playTrack(id){
 
   document.getElementById('playerAlbumTitle').textContent = found.albumTitle || (currentAlbum && currentAlbum.title) || '';
   document.getElementById('playerAlbumMeta').textContent = `${found.albumArtist || ''}`;
-  showView(playerView);
+  showView(document.getElementById('playerView'));
   preloadNextTrack();
   setupMediaSession();
 
-  // clear spinner timeout once playing starts
-  audio.addEventListener('playing', ()=> {
-    clearTimeout(spinnerTimeout);
-    coverSpinner.classList.add('hidden');
-  }, { once: true });
+  // show mini only when leaving player view (handled by showView). Do NOT auto open player on new song.
 }
 
-// LRC load + parse + render; clicking a line seeks to that time
+// LRC: load + parse + render (click line -> seek)
 async function loadLRC(path){
   lyrics = [];
   lyricsBox.innerHTML = '<div class="muted">Ładowanie tekstu...</div>';
@@ -301,7 +281,10 @@ async function loadLRC(path){
     const txt = await res.text();
     lyrics = parseLRC(txt);
     renderLyrics();
-    if(settings.autoFollow) { scrollToCurrentLine(); resumeAuto.classList.add('hidden'); }
+    if(settings.autoFollow){
+      scrollToCurrentLine();
+      resumeAuto.classList.add('hidden');
+    }
   } catch(err){
     if(err.name === 'AbortError') return;
     console.warn('LRC load error', err);
@@ -335,17 +318,17 @@ function renderLyrics(){
   if(!lyrics.length){ lyricsBox.innerHTML = '<div class="muted">Brak tekstu</div>'; return; }
   lyricsBox.innerHTML = lyrics.map((l,i) => `<div data-idx="${i}" data-time="${l.time}">${escapeHtml(l.text)}</div>`).join('');
   lyricsBox.addEventListener('scroll', onLyricsScrollUser, { passive: true });
-  // clicking a line seeks
   lyricsBox.querySelectorAll('div[data-time]').forEach(el => el.addEventListener('click', (e) => {
     const t = Number(el.dataset.time || 0);
     audio.currentTime = t;
-    if(!playerView.classList.contains('active')) showView(playerView);
+    if(!document.getElementById('playerView').classList.contains('active')) showView(document.getElementById('playerView'));
   }));
 }
 
 let userScrolled = false;
 let lyricsScrollTimeout = null;
 function onLyricsScrollUser(){
+  if(isAutoScrolling) return; // IGNORE programmatic scrolls
   if(lyricsScrollTimeout) clearTimeout(lyricsScrollTimeout);
   if(!userScrolled){
     userScrolled = true;
@@ -353,7 +336,7 @@ function onLyricsScrollUser(){
     localStorage.setItem('autoFollow', 'false');
     resumeAuto.classList.remove('hidden');
   }
-  lyricsScrollTimeout = setTimeout(()=>{ /* nothing */ }, 300);
+  lyricsScrollTimeout = setTimeout(()=>{ /* no-op */ }, 300);
 }
 
 function scrollToCurrentLine(){
@@ -363,7 +346,12 @@ function scrollToCurrentLine(){
     if(t >= lyrics[i].time && (!lyrics[i+1] || t < lyrics[i+1].time)){
       const nodes = lyricsBox.children;
       for(let j=0;j<nodes.length;j++) nodes[j].classList.toggle('active', j===i);
-      if(nodes[i]) nodes[i].scrollIntoView({ behavior:'smooth', block:'center' });
+      if(nodes[i]){
+        isAutoScrolling = true;
+        nodes[i].scrollIntoView({ behavior:'smooth', block:'center' });
+        // clear flag after animation time (safe)
+        setTimeout(()=> { isAutoScrolling = false; }, 520);
+      }
       break;
     }
   }
@@ -377,7 +365,11 @@ function highlightCurrentLyric(){
       const nodes = lyricsBox.children;
       if(nodes.length && settings.autoFollow && !userScrolled){
         for(let j=0;j<nodes.length;j++) nodes[j].classList.toggle('active', j===i);
-        if(nodes[i]) nodes[i].scrollIntoView({ behavior:'smooth', block:'center' });
+        if(nodes[i]) {
+          isAutoScrolling = true;
+          nodes[i].scrollIntoView({ behavior:'smooth', block:'center' });
+          setTimeout(()=> { isAutoScrolling = false; }, 520);
+        }
       } else {
         for(let j=0;j<nodes.length;j++) nodes[j].classList.toggle('active', j===i);
       }
@@ -386,26 +378,25 @@ function highlightCurrentLyric(){
   }
 }
 
-// audio events
+// AUDIO events & progress
 audio.addEventListener('timeupdate', () => {
   if(audio.duration && isFinite(audio.duration)){
     const pct = (audio.currentTime / audio.duration) * 100;
     progressFill.style.width = pct + '%';
     curTimeEl.textContent = fmtTime(audio.currentTime);
     durTimeEl.textContent = fmtTime(audio.duration);
+    // update mini progress too
+    if(miniProgressFill) {
+      const mpct = (audio.currentTime / (audio.duration || 1)) * 100;
+      miniProgressFill.style.width = mpct + '%';
+    }
   }
   highlightCurrentLyric();
 });
 
-audio.addEventListener('loadeddata', () => { coverSpinner.classList.add('hidden'); });
-
-audio.addEventListener('canplay', () => { coverSpinner.classList.add('hidden'); });
-audio.addEventListener('playing', () => { coverSpinner.classList.add('hidden'); });
-
-audio.addEventListener('error', () => { showAudioError('Błąd odtwarzania (plik nie istnieje / CORS / uszkodzony).'); coverSpinner.classList.add('hidden'); });
+audio.addEventListener('error', () => { showAudioError('Błąd odtwarzania (plik nie istnieje / CORS / uszkodzony).'); });
 
 audio.addEventListener('ended', () => {
-  // don't open mini->player automatically; handle only playback logic
   if(settings.shuffle){
     if(queue.length <= 1) return;
     let rnd;
@@ -418,7 +409,7 @@ audio.addEventListener('ended', () => {
   }
 });
 
-// progress seek
+// seeking (main)
 progressBar.addEventListener('click', (e) => {
   if(!audio.duration) return;
   const rect = progressBar.getBoundingClientRect();
@@ -426,14 +417,9 @@ progressBar.addEventListener('click', (e) => {
   audio.currentTime = pct * audio.duration;
 });
 
-// play/pause
+// play/pause (no auto-show of mini on play/pause)
 playPauseBtn.addEventListener('click', () => { if(audio.paused) audio.play().catch(()=>{}); else audio.pause(); });
-audio.addEventListener('play', ()=> {
-  playPauseBtn.textContent = '⏸';
-  miniPlay.textContent = '⏸';
-  // show mini only if user is NOT viewing full player
-  if(!playerView.classList.contains('active')) showMini(true);
-});
+audio.addEventListener('play', ()=> { playPauseBtn.textContent = '⏸'; miniPlay.textContent = '⏸'; });
 audio.addEventListener('pause', ()=> { playPauseBtn.textContent = '▶️'; miniPlay.textContent = '▶️'; });
 
 // prev/next
@@ -462,7 +448,7 @@ nextBtn.addEventListener('click', () => {
   }
 });
 
-// like
+// like button
 likeBtn.addEventListener('click', () => {
   if(!currentTrack) return;
   toggleLike(currentTrack.id);
@@ -481,7 +467,7 @@ function preloadNextTrack(){
   }catch(e){}
 }
 
-// MEDIA SESSION
+// media session
 function setupMediaSession(){
   if(!('mediaSession' in navigator) || !currentTrack) return;
   navigator.mediaSession.metadata = new MediaMetadata({
@@ -559,28 +545,32 @@ resumeBtn.addEventListener('click', ()=> {
   scrollToCurrentLine();
 });
 
-// volume slider custom: compute pixel-perfect fill
+// VOLUME custom (main + mini)
 volumeEl.value = settings.volume;
 applyVolume();
 volumeEl.addEventListener('input', (e) => { settings.volume = Number(e.target.value); applyVolume(); localStorage.setItem('volume', String(settings.volume)); });
+miniVolume.value = settings.volume;
+miniVolume.addEventListener('input', (e) => { settings.volume = Number(e.target.value); applyVolume(); localStorage.setItem('volume', String(settings.volume)); });
 function applyVolume(){
   audio.volume = settings.volume;
+  // main fill
   const wrap = document.querySelector('.custom-range-wrap');
   const fill = document.querySelector('.custom-range-fill');
-  if(!wrap || !fill) return;
-  const rect = wrap.getBoundingClientRect();
-  const w = rect.width;
-  const px = Math.round(settings.volume * w);
-  fill.style.width = px + 'px';
-  volumeEl.value = settings.volume;
+  if(wrap && fill){
+    const rect = wrap.getBoundingClientRect();
+    const px = Math.round(settings.volume * rect.width);
+    fill.style.width = px + 'px';
+  }
+  // mini volume reflect
+  if(miniVolume) miniVolume.value = settings.volume;
 }
 
-// shuffle/loop toggles
+// shuffle/loop
 shuffleBtn.addEventListener('click', ()=> { settings.shuffle = !settings.shuffle; localStorage.setItem('shuffle', settings.shuffle); updateShuffleLoopButtons(); });
 loopBtn.addEventListener('click', ()=> { settings.loop = !settings.loop; localStorage.setItem('loop', settings.loop); updateShuffleLoopButtons(); });
 function updateShuffleLoopButtons(){ shuffleBtn.style.opacity = settings.shuffle ? '1' : '0.5'; loopBtn.style.opacity = settings.loop ? '1' : '0.5'; }
 
-// mini player controls
+// MINI player controls
 function showMini(show){
   if(show && currentTrack){
     miniThumb.src = currentTrack.albumCover || currentTrack.cover || 'covers/placeholder.png';
@@ -593,12 +583,21 @@ function showMini(show){
     miniPlayer.classList.add('hidden');
   }
 }
-miniLeft.addEventListener('click', ()=> showView(playerView));
+miniLeft.addEventListener('click', ()=> showView(document.getElementById('playerView'))); // click whole left area opens player
 miniPlay.addEventListener('click', ()=> { if(audio.paused) audio.play().catch(()=>{}); else audio.pause(); });
 miniNext.addEventListener('click', ()=> nextBtn.click());
 miniPrev.addEventListener('click', ()=> prevBtn.click());
 miniLike.addEventListener('click', ()=> { if(currentTrack){ toggleLike(currentTrack.id); updateLikeButton(); miniLike.textContent = liked.includes(currentTrack.id) ? '♥' : '♡'; renderAlbumsWithLiked(); }});
-miniOpen.addEventListener('click', ()=> showView(playerView));
+
+// mini progress seeking
+if(miniProgress){
+  miniProgress.addEventListener('click', (e) => {
+    if(!audio.duration) return;
+    const rect = miniProgress.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    audio.currentTime = pct * audio.duration;
+  });
+}
 
 // liked persistence
 function saveLiked(ids){ try{ localStorage.setItem('liked', JSON.stringify(ids)); }catch(e){ document.cookie = "liked=" + encodeURIComponent(JSON.stringify(ids)) + "; max-age=" + (60*60*24*365) + "; path=/"; } }
@@ -609,7 +608,7 @@ function toggleLike(id){ if(!id) return; const i = liked.indexOf(id); if(i === -
 function showError(msg){ errorMsg.textContent = msg; errorMsg.classList.remove('hidden'); }
 function showAudioError(msg){ const el = document.getElementById('audioError'); el.textContent = msg; el.classList.remove('hidden'); setTimeout(()=>el.classList.add('hidden'), 6000); }
 
-// small keyboard shortcuts
+// keyboard shortcuts
 document.addEventListener('keydown', (e) => {
   if(e.code === 'Space' && document.activeElement.tagName !== 'INPUT'){ e.preventDefault(); if(audio.paused) audio.play(); else audio.pause(); }
   if(e.code === 'ArrowRight') audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 5);
@@ -617,10 +616,10 @@ document.addEventListener('keydown', (e) => {
 });
 
 // back buttons
-backFromTracks.addEventListener('click', ()=> showView(albumsView));
-backFromPlayer.addEventListener('click', ()=> showView(tracksView));
+backFromTracks.addEventListener('click', ()=> showView(document.getElementById('albumsView')));
+backFromPlayer.addEventListener('click', ()=> showView(document.getElementById('tracksView')));
 
-// tab switching (lyrics/queue)
+// tabs (lyrics/queue)
 tabBtns.forEach(btn => btn.addEventListener('click', ()=> {
   tabBtns.forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -630,5 +629,15 @@ tabBtns.forEach(btn => btn.addEventListener('click', ()=> {
   if(target === 'queue') renderQueue();
 }));
 
-// initial noop
+// helpers: preload
+function preloadNextTrack(){
+  try{
+    const idx = queue.findIndex(t => t.id === (currentTrack && currentTrack.id));
+    const next = (idx >= 0 && idx < queue.length - 1) ? queue[idx+1] : null;
+    if(!next) return;
+    const link = document.createElement('link'); link.rel = 'preload'; link.as = 'audio'; link.href = next.audio; document.head.appendChild(link);
+  }catch(e){}
+}
+
+// simple search render on init
 document.addEventListener('DOMContentLoaded', ()=>{});
