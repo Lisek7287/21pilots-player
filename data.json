@@ -1,25 +1,34 @@
 {
   "albums": [
     {
-      "id": "stories",
-      "title": "Stories",
-      "artist": "Avicii",
-      "year": 2015,
-      "cover": "covers/stories.jpg",
+      "id": "nophunintended",
+      "title": "No Phun Intended",
+      "artist": "Twenty One Pilots",
+      "year": 2007,
+      "cover": "assets/covers/NoPhunIntended.png",
       "tracks": [
         {
-          "id": "waiting-for-love",
-          "title": "Waiting For Love",
+          "id": "save",
+          "title": "Save",
           "duration": "3:51",
-          "audio": "audio/waiting_for_love.mp3",
-          "lrc": "lyrics/waiting_for_love.lrc"
-        },
+          "audio": "assets/audio/Save.m4a",
+          "lrc": "assets/lyrics/Save.lrc"
+        }
+      ]
+    },
+    {
+      "id": "blurryface",
+      "title": "Blurryface",
+      "artist": "Twenty One Pilots",
+      "year": 2015,
+      "cover": "assets/covers/blurryface.png",
+      "tracks": [
         {
-          "id": "talk-to-myself",
-          "title": "Talk To Myself",
-          "duration": "3:55",
-          "audio": "audio/talk_to_myself.mp3",
-          "lrc": "lyrics/talk_to_myself.lrc"
+          "id": "we-dont-believe-whats-on-tv",
+          "title": "We Don't Believe What's on Tv",
+          "duration": "3:51",
+          "audio": "assets/audio/WeDontBelieveWhatsOnTV.flac",
+          "lrc": "assets/lyrics/WeDontBelieveWhatsOnTV.lrc"
         }
       ]
     }
