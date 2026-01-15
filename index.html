@@ -1,83 +1,63 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
   <title>Music Player</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app">
 
-    <!-- LEFT: ALBUMY -->
-    <aside class="left-panel">
+<div class="app">
+
+  <!-- ALBUMY -->
+  <section id="albumsView" class="view active">
+    <header>
+      <h1>Albumy</h1>
+      <input type="text" id="search" placeholder="Szukaj albumu lub piosenki">
+    </header>
+    <div id="albums" class="albums-grid"></div>
+  </section>
+
+  <!-- PIOSENKI -->
+  <section id="tracksView" class="view">
+    <header>
+      <button class="back">←</button>
+      <h2 id="albumTitle"></h2>
+    </header>
+    <ul id="tracks"></ul>
+  </section>
+
+  <!-- PLAYER -->
+  <section id="playerView" class="view">
+    <header>
+      <button class="back">←</button>
+    </header>
+
+    <div class="player">
+      <img id="cover">
+      <h3 id="title"></h3>
+
+      <div class="progress">
+        <i></i>
+      </div>
+
       <div class="controls">
-        <input id="search" type="search" placeholder="Szukaj piosenki lub albumu..." aria-label="Szukaj">
-        <select id="sort" aria-label="Sortuj">
-          <option value="title">A → Z</option>
-          <option value="year">Rok wydania</option>
-        </select>
-      </div>
-
-      <div id="albumsGrid" class="albums-grid" role="list" aria-label="Lista albumów">
-        <!-- album cards injected here -->
-      </div>
-
-      <div id="errorMsg" class="error hidden"></div>
-    </aside>
-
-    <!-- CENTER: PODGLĄD ALBUMU -->
-    <main class="center-panel">
-      <div id="albumView" class="album-view">
-        <div class="placeholder">Wybierz album z lewej strony</div>
-      </div>
-    </main>
-
-    <!-- RIGHT: PLAYER / QUEUE / LYRICS -->
-    <aside class="right-panel">
-      <div class="player-big">
-        <div class="player-cover" id="playerCover" aria-hidden="true">
-          <img id="coverImg" src="" alt="">
-        </div>
-
-        <div class="player-meta">
-          <h3 id="nowTitle">Nic nie gra</h3>
-          <div id="nowArtist" class="muted">—</div>
-
-          <div class="progress" id="progressBar" aria-label="Postęp odtwarzania" role="progressbar" tabindex="0">
-            <i class="progress-fill"></i>
-            <div class="scrubber" id="scrubber" aria-hidden="true"></div>
-          </div>
-
-          <div class="controls-row">
-            <button id="prevBtn" class="btn" title="Poprzedni">⏮</button>
-            <button id="playPauseBtn" class="btn" title="Odtwórz/Pauza">▶️</button>
-            <button id="nextBtn" class="btn" title="Następny">⏭</button>
-            <button id="likeBtn" class="btn" title="Polub">♡</button>
-            <div class="time">
-              <span id="curTime">0:00</span> / <span id="durTime">0:00</span>
-            </div>
-          </div>
-        </div>
+        <button id="play">⏯</button>
       </div>
 
       <div class="tabs">
-        <button data-tab="queue" class="tab active">Kolejka</button>
-        <button data-tab="lyrics" class="tab">Tekst</button>
+        <button data-tab="lyrics">Tekst</button>
+        <button data-tab="queue">Kolejka</button>
       </div>
 
-      <div id="queue" class="tab-content">
-        <!-- kolejka -->
-      </div>
+      <div id="lyrics" class="tab active"></div>
+      <div id="queue" class="tab"></div>
+    </div>
+  </section>
 
-      <div id="lyrics" class="tab-content hidden" aria-live="polite">
-        <!-- lrc lines -->
-      </div>
+</div>
 
-      <audio id="audio" preload="metadata"></audio>
-    </aside>
-  </div>
-
-  <script src="app.js" defer></script>
+<audio id="audio"></audio>
+<script src="app.js"></script>
 </body>
 </html>
