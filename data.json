@@ -1,0 +1,20 @@
+{
+  "albums": [
+    {
+      "id": "stories",
+      "title": "Stories",
+      "artist": "Avicii",
+      "year": 2015,
+      "cover": "covers/stories.jpg",
+      "tracks": [
+        {
+          "id": "waiting-for-love",
+          "title": "Waiting For Love",
+          "duration": "3:51",
+          "audio": "audio/waiting_for_love.mp3",
+          "lrc": "lyrics/waiting_for_love.lrc"
+        }
+      ]
+    }
+  ]
+}
