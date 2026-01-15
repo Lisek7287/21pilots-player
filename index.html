@@ -11,7 +11,7 @@
 
     <!-- VIEW: ALBUMY -->
     <section id="albumsView" class="view active" aria-label="Widok albumów">
-      <header class="view-header">
+      <header class="view-header topbar">
         <h1>Albumy</h1>
         <div class="controls">
           <input id="search" type="search" placeholder="Szukaj albumu lub piosenki..." aria-label="Szukaj">
@@ -29,7 +29,7 @@
 
     <!-- VIEW: PIOSENKI W ALBUMIE -->
     <section id="tracksView" class="view" aria-label="Lista piosenek">
-      <header class="view-header">
+      <header class="view-header topbar">
         <button id="backFromTracks" class="back btn" aria-label="Wstecz">←</button>
         <div>
           <h2 id="albumTitle">Album</h2>
@@ -45,7 +45,7 @@
 
     <!-- VIEW: PLAYER -->
     <section id="playerView" class="view" aria-label="Odtwarzacz">
-      <header class="view-header">
+      <header class="view-header topbar">
         <button id="backFromPlayer" class="back btn" aria-label="Wstecz">←</button>
         <div>
           <h2 id="playerAlbumTitle">Odtwarzacz</h2>
@@ -73,10 +73,20 @@
               <button id="prevBtn" class="btn" title="Poprzedni">⏮</button>
               <button id="playPauseBtn" class="btn" title="Odtwórz/Pauza">▶️</button>
               <button id="nextBtn" class="btn" title="Następny">⏭</button>
+
+              <button id="shuffleBtn" class="btn" title="Losowość">🔀</button>
+              <button id="loopBtn" class="btn" title="Zapętlaj">🔁</button>
+
               <button id="likeBtn" class="btn" title="Polub">♡</button>
+
               <div class="time muted">
                 <span id="curTime">0:00</span> / <span id="durTime">0:00</span>
               </div>
+            </div>
+
+            <div class="volume-row">
+              <label for="volumeEl">Głośność</label>
+              <input id="volumeEl" type="range" min="0" max="1" step="0.01">
             </div>
 
             <div class="lrc-offset">
@@ -93,6 +103,7 @@
           </div>
 
           <div id="lyrics" class="tab-content" aria-live="polite"></div>
+          <div id="resumeAuto" class="resume hidden"><button id="resumeBtn" class="btn">Przywróć autoscroll</button></div>
           <div id="queue" class="tab-content hidden"></div>
         </div>
       </main>
