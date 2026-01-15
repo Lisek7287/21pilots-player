@@ -22,7 +22,10 @@
         </div>
       </header>
 
-      <div id="albumsGrid" class="albums-grid" role="list" aria-label="Lista albumów"></div>
+      <div id="albumsGridWrap" class="albums-grid-wrap">
+        <!-- wrapper so topbar is not inside scroll context -->
+        <div id="albumsGrid" class="albums-grid" role="list" aria-label="Lista albumów"></div>
+      </div>
 
       <div id="errorMsg" class="error hidden" role="alert"></div>
     </section>
@@ -70,14 +73,14 @@
             </div>
 
             <div class="controls-row">
-              <button id="prevBtn" class="btn" title="Poprzedni">⏮</button>
-              <button id="playPauseBtn" class="btn" title="Odtwórz/Pauza">▶️</button>
-              <button id="nextBtn" class="btn" title="Następny">⏭</button>
+              <button id="prevBtn" class="btn icon-btn" title="Poprzedni" aria-label="Poprzedni">⏮</button>
+              <button id="playPauseBtn" class="btn play-btn" title="Odtwórz/Pauza" aria-label="Odtwórz">▶️</button>
+              <button id="nextBtn" class="btn icon-btn" title="Następny" aria-label="Następny">⏭</button>
 
-              <button id="shuffleBtn" class="btn" title="Losowość">🔀</button>
-              <button id="loopBtn" class="btn" title="Zapętlaj">🔁</button>
+              <button id="shuffleBtn" class="btn icon-btn" title="Losowość" aria-label="Losowość">🔀</button>
+              <button id="loopBtn" class="btn icon-btn" title="Zapętlaj" aria-label="Zapętlaj">🔁</button>
 
-              <button id="likeBtn" class="btn" title="Polub">♡</button>
+              <button id="likeBtn" class="btn icon-btn" title="Polub" aria-label="Polub">♡</button>
 
               <div class="time muted">
                 <span id="curTime">0:00</span> / <span id="durTime">0:00</span>
@@ -85,14 +88,13 @@
             </div>
 
             <div class="volume-row">
-              <label for="volumeEl">Głośność</label>
-              <input id="volumeEl" type="range" min="0" max="1" step="0.01">
+              <label for="volumeEl" class="muted">Głośność</label>
+              <div class="custom-range-wrap">
+                <input id="volumeEl" class="custom-range" type="range" min="0" max="1" step="0.01">
+                <div class="custom-range-fill" aria-hidden="true"></div>
+              </div>
             </div>
 
-            <div class="lrc-offset">
-              <label for="lrcOffset">Offset LRC: <span id="offsetVal">0 ms</span></label>
-              <input id="lrcOffset" type="range" min="-2000" max="2000" step="50" />
-            </div>
           </div>
         </div>
 
@@ -103,7 +105,18 @@
           </div>
 
           <div id="lyrics" class="tab-content" aria-live="polite"></div>
-          <div id="resumeAuto" class="resume hidden"><button id="resumeBtn" class="btn">Przywróć autoscroll</button></div>
+
+          <div id="resumeAuto" class="resume hidden" aria-hidden="true">
+            <!-- ikonowy przycisk zamiast napisu -->
+            <button id="resumeBtn" class="btn icon-btn" title="Przywróć autoscroll" aria-label="Przywróć autoscroll">
+              <!-- small SVG icon (centered arrow) -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 6v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 9l3-3 3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
           <div id="queue" class="tab-content hidden"></div>
         </div>
       </main>
@@ -111,6 +124,21 @@
       <div id="audioError" class="error hidden" role="alert"></div>
       <audio id="audio" preload="metadata"></audio>
     </section>
+
+    <!-- MINI PLAYER bar (visible kiedy wychodzisz z playera lub zawsze dolny gdy gra) -->
+    <div id="miniPlayer" class="mini-player hidden" role="region" aria-label="Mini player - kliknij, by otworzyć">
+      <div class="mini-left" id="miniLeft">
+        <img id="miniThumb" src="covers/placeholder.png" alt="" />
+        <div class="mini-meta">
+          <div id="miniTitle" class="mini-title">Nic nie gra</div>
+          <div id="miniSub" class="mini-sub muted">—</div>
+        </div>
+      </div>
+      <div class="mini-controls">
+        <button id="miniPlay" class="btn icon-btn" title="Play/Pause">▶️</button>
+        <button id="miniNext" class="btn icon-btn" title="Next">⏭</button>
+      </div>
+    </div>
 
   </div>
 
