@@ -13,6 +13,13 @@
           "duration": "3:51",
           "audio": "audio/waiting_for_love.mp3",
           "lrc": "lyrics/waiting_for_love.lrc"
+        },
+        {
+          "id": "talk-to-myself",
+          "title": "Talk To Myself",
+          "duration": "3:55",
+          "audio": "audio/talk_to_myself.mp3",
+          "lrc": "lyrics/talk_to_myself.lrc"
         }
       ]
     }
