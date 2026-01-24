@@ -1,0 +1,604 @@
+[
+  {
+    "id": "twenty_one_pilots",
+    "title": "Twenty One Pilots",
+    "year": 2009,
+    "cover": "covers/TwentyOnePilots.png",
+    "tracks": [
+      {
+        "file": "songs/Implicit Demand For Proof.mp3",
+        "title": "Implicit Demand For Proof",
+        "duration": 292,
+        "lrc": "lrc/Implicit Demand For Proof.lrc"
+      },
+      {
+        "file": "songs/Fall Away.mp3",
+        "title": "Fall Away",
+        "duration": 182,
+        "lrc": "lrc/Fall Away.lrc"
+      },
+      {
+        "file": "songs/The Pantaloon.mp3",
+        "title": "The Pantaloon",
+        "duration": 214,
+        "lrc": "lrc/The Pantaloon.lrc"
+      },
+      {
+        "file": "songs/Addict With A Pen.mp3",
+        "title": "Addict With A Pen",
+        "duration": 287,
+        "lrc": "lrc/Addict With A Pen.lrc"
+      },
+      {
+        "file": "songs/Friend, Please.mp3",
+        "title": "Friend, Please",
+        "duration": 253,
+        "lrc": "lrc/Friend, Please.lrc"
+      },
+      {
+        "file": "songs/March To the Sea.mp3",
+        "title": "March To the Sea",
+        "duration": 332,
+        "lrc": "lrc/March To the Sea.lrc"
+      },
+      {
+        "file": "songs/Johnny Boy.mp3",
+        "title": "Johnny Boy",
+        "duration": 280,
+        "lrc": "lrc/Johnny Boy.lrc"
+      },
+      {
+        "file": "songs/Oh Ms Believer.mp3",
+        "title": "Oh Ms Believer",
+        "duration": 217,
+        "lrc": "lrc/Oh Ms Believer.lrc"
+      },
+      {
+        "file": "songs/Air Catcher.mp3",
+        "title": "Air Catcher",
+        "duration": 234,
+        "lrc": "lrc/Air Catcher.lrc"
+      },
+      {
+        "file": "songs/Trapdoor.mp3",
+        "title": "Trapdoor",
+        "duration": 278,
+        "lrc": "lrc/Trapdoor.lrc"
+      },
+      {
+        "file": "songs/A Car, a Torch, a Death.mp3",
+        "title": "A Car, a Torch, a Death",
+        "duration": 274,
+        "lrc": "lrc/A Car, a Torch, a Death.lrc"
+      },
+      {
+        "file": "songs/Taxi Cab.mp3",
+        "title": "Taxi Cab",
+        "duration": 286,
+        "lrc": "lrc/Taxi Cab.lrc"
+      },
+      {
+        "file": "songs/Before You Start Your Day.mp3",
+        "title": "Before You Start Your Day",
+        "duration": 233,
+        "lrc": "lrc/Before You Start Your Day.lrc"
+      },
+      {
+        "file": "songs/Isle Of Flightless Birds.mp3",
+        "title": "Isle Of Flightless Birds",
+        "duration": 346,
+        "lrc": "lrc/Isle Of Flightless Birds.lrc"
+      }
+    ]
+  },
+  {
+    "id": "vessel",
+    "title": "Vessel",
+    "year": 2013,
+    "cover": "covers/Vessel.png",
+    "tracks": [
+      {
+        "file": "songs/Ode to Sleep.mp3",
+        "title": "Ode To Sleep",
+        "duration": 309,
+        "lrc": "lrc/Ode To Sleep.lrc"
+      },
+      {
+        "file": "songs/Holding on to You.mp3",
+        "title": "Holding on to You",
+        "duration": 264,
+        "lrc": "lrc/Holding on to You.lrc"
+      },
+      {
+        "file": "songs/Migrain.mp3",
+        "title": "Migrain",
+        "duration": 240,
+        "lrc": "lrc/Migrain.lrc"
+      },
+      {
+        "file": "songs/House of Gold.mp3",
+        "title": "House of Gold",
+        "duration": 164,
+        "lrc": "lrc/House of Gold.lrc"
+      },
+      {
+        "file": "songs/Car Radio.mp3",
+        "title": "Car Radio",
+        "duration": 268,
+        "lrc": "lrc/Car Radio.lrc"
+      },
+      {
+        "file": "songs/Semi-Automatic.mp3",
+        "title": "Semi-Automatic",
+        "duration": 294,
+        "lrc": "lrc/Semi-Automatic.lrc"
+      },
+      {
+        "file": "songs/Screen.mp3",
+        "title": "Screen",
+        "duration": 230,
+        "lrc": "lrc/Screen.lrc"
+      },
+      {
+        "file": "songs/The Run and Go.mp3",
+        "title": "The Run and Go",
+        "duration": 229,
+        "lrc": "lrc/The Run and Go.lrc"
+      },
+      {
+        "file": "songs/Fake You Out.mp3",
+        "title": "Fake You Out",
+        "duration": 232,
+        "lrc": "lrc/Fake You Out.lrc"
+      },
+      {
+        "file": "songs/Guns for Hands.mp3",
+        "title": "Guns for Hands",
+        "duration": 274,
+        "lrc": "lrc/Guns for Hands.lrc"
+      },
+      {
+        "file": "songs/Trees.mp3",
+        "title": "Trees",
+        "duration": 268,
+        "lrc": "lrc/Trees.lrc"
+      },
+      {
+        "file": "songs/Truce.mp3",
+        "title": "Truce",
+        "duration": 143,
+        "lrc": "lrc/Truce.lrc"
+      }
+    ]
+  },
+  {
+    "id": "blurryface",
+    "title": "Blurryface",
+    "year": 2015,
+    "cover": "covers/Blurryface.png",
+    "tracks": [
+      {
+        "file": "songs/Heavydirtysoul.mp3",
+        "title": "Heavydirtysoul",
+        "duration": 235,
+        "lrc": "lrc/Heavydirtysoul.lrc"
+      },
+      {
+        "file": "songs/Stressed Out.mp3",
+        "title": "Stressed Out",
+        "duration": 203,
+        "lrc": "lrc/Stressed Out.lrc"
+      },
+      {
+        "file": "songs/Ride.mp3",
+        "title": "Ride",
+        "duration": 215,
+        "lrc": "lrc/Ride.lrc"
+      },
+      {
+        "file": "songs/Fairly Local.mp3",
+        "title": "Fairly Local",
+        "duration": 208,
+        "lrc": "lrc/Fairly Local.lrc"
+      },
+      {
+        "file": "songs/Tear in My Heart.mp3",
+        "title": "Tear In My Heart",
+        "duration": 189,
+        "lrc": "lrc/Tear in My Heart.lrc"
+      },
+      {
+        "file": "songs/Lane Boy.mp3",
+        "title": "Lane Boy",
+        "duration": 254,
+        "lrc": "lrc/Lane Boy.lrc"
+      },
+      {
+        "file": "songs/The Judge.mp3",
+        "title": "The Judge",
+        "duration": 298,
+        "lrc": "lrc/The Judge.lrc"
+      },
+      {
+        "file": "songs/Doubt.mp3",
+        "title": "Doubt",
+        "duration": 192,
+        "lrc": "lrc/Doubt.lrc"
+      },
+      {
+        "file": "songs/Polarize.mp3",
+        "title": "Polarize",
+        "duration": 227,
+        "lrc": "lrc/Polarize.lrc"
+      },
+      {
+        "file": "songs/We Don't Believe What's on TV.mp3",
+        "title": "We Don't Believe What's on TV",
+        "duration": 178,
+        "lrc": "lrc/We Don't Believe What's on TV.lrc"
+      },
+      {
+        "file": "songs/Message Man.mp3",
+        "title": "Message Man",
+        "duration": 241,
+        "lrc": "lrc/Message Man.lrc"
+      },
+      {
+        "file": "songs/Hometown.mp3",
+        "title": "Hometown",
+        "duration": 235,
+        "lrc": "lrc/Hometown.lrc"
+      },
+      {
+        "file": "songs/Not Today.mp3",
+        "title": "Not Today",
+        "duration": 239,
+        "lrc": "lrc/Not Today.lrc"
+      },
+      {
+        "file": "songs/Goner.mp3",
+        "title": "Goner",
+        "duration": 237,
+        "lrc": "lrc/Goner.lrc"
+      }
+    ]
+  },
+  {
+    "id": "trench",
+    "title": "Trench",
+    "year": 2018,
+    "cover": "covers/Trench.png",
+    "tracks": [
+      {
+        "file": "songs/Jumpsuit.mp3",
+        "title": "Jumpsuit",
+        "duration": 239,
+        "lrc": "lrc/Jumpsuit.lrc"
+      },
+      {
+        "file": "songs/Levitate.mp3",
+        "title": "Levitate",
+        "duration": 146,
+        "lrc": "lrc/Levitate.lrc"
+      },
+      {
+        "file": "songs/Morph.mp3",
+        "title": "Morph",
+        "duration": 259,
+        "lrc": "lrc/Morph.lrc"
+      },
+      {
+        "file": "songs/My Blood.mp3",
+        "title": "My Blood",
+        "duration": 230,
+        "lrc": "lrc/My Blood.lrc"
+      },
+      {
+        "file": "songs/Chlorine.mp3",
+        "title": "Chlorine",
+        "duration": 325,
+        "lrc": "lrc/Chlorine.lrc"
+      },
+      {
+        "file": "songs/Smithereens.mp3",
+        "title": "Smithereens",
+        "duration": 178,
+        "lrc": "lrc/Smithereens.lrc"
+      },
+      {
+        "file": "songs/Neon Gravestones.mp3",
+        "title": "Neon Gravestones",
+        "duration": 241,
+        "lrc": "lrc/Neon Gravestones.lrc"
+      },
+      {
+        "file": "songs/The Hype.mp3",
+        "title": "The Hype",
+        "duration": 266,
+        "lrc": "lrc/The Hype.lrc"
+      },
+      {
+        "file": "songs/Nico and the Niners.mp3",
+        "title": "Nico and the Niners",
+        "duration": 226,
+        "lrc": "lrc/Nico and the Niners.lrc"
+      },
+      {
+        "file": "songs/Cut My Lip.mp3",
+        "title": "Cut My Lip",
+        "duration": 283,
+        "lrc": "lrc/Cut My Lip.lrc"
+      },
+      {
+        "file": "songs/Bandito.mp3",
+        "title": "Bandito",
+        "duration": 331,
+        "lrc": "lrc/Bandito.lrc"
+      },
+      {
+        "file": "songs/Pet Cheetah.mp3",
+        "title": "Pet Cheetah",
+        "duration": 199,
+        "lrc": "lrc/Pet Cheetah.lrc"
+      },
+      {
+        "file": "songs/Legend.mp3",
+        "title": "Legend",
+        "duration": 173,
+        "lrc": "lrc/Legend.lrc"
+      },
+      {
+        "file": "songs/Leave the City.mp3",
+        "title": "Leave the City",
+        "duration": 281,
+        "lrc": "lrc/Leave the City.lrc"
+      }
+    ]
+  },
+  {
+    "id": "scaled_and_icy",
+    "title": "Scaled And Icy",
+    "year": 2021,
+    "cover": "covers/ScaledAndIcy.png",
+    "tracks": [
+      {
+        "file": "songs/Good Day.mp3",
+        "title": "Good Day",
+        "duration": 205,
+        "lrc": "lrc/Good Day.lrc"
+      },
+      {
+        "file": "songs/Choker.mp3",
+        "title": "Choker",
+        "duration": 224,
+        "lrc": "lrc/Choker.lrc"
+      },
+      {
+        "file": "songs/Shy Away.mp3",
+        "title": "Shy Away",
+        "duration": 176,
+        "lrc": "lrc/Shy Away.lrc"
+      },
+      {
+        "file": "songs/The Outside.mp3",
+        "title": "The Outside",
+        "duration": 217,
+        "lrc": "lrc/The Outside.lrc"
+      },
+      {
+        "file": "songs/Saturday.mp3",
+        "title": "Saturday",
+        "duration": 173,
+        "lrc": "lrc/Saturday.lrc"
+      },
+      {
+        "file": "songs/Never Take It.mp3",
+        "title": "Never Take It",
+        "duration": 213,
+        "lrc": "lrc/Never Take It.lrc"
+      },
+      {
+        "file": "songs/Mulberry Street.mp3",
+        "title": "Mulberry Street",
+        "duration": 225,
+        "lrc": "lrc/Mulberry Street.lrc"
+      },
+      {
+        "file": "songs/Formidable.mp3",
+        "title": "Formidable",
+        "duration": 177,
+        "lrc": "lrc/Formidable.lrc"
+      },
+      {
+        "file": "songs/Bounce Man.mp3",
+        "title": "Bounce Man",
+        "duration": 186,
+        "lrc": "lrc/Bounce Man.lrc"
+      },
+      {
+        "file": "songs/No Chances.mp3",
+        "title": "No Chances",
+        "duration": 227,
+        "lrc": "lrc/No Chances.lrc"
+      },
+      {
+        "file": "songs/Redecorate.mp3",
+        "title": "Redecorate",
+        "duration": 246,
+        "lrc": "lrc/Redecorate.lrc"
+      }
+    ]
+  },
+  {
+    "id": "clancy",
+    "title": "Clancy",
+    "year": 2024,
+    "cover": "covers/Clancy.png",
+    "tracks": [
+      {
+        "file": "songs/Overcompensate.mp3",
+        "title": "Overcompensate",
+        "duration": 236,
+        "lrc": "lrc/Overcompensate.lrc"
+      },
+      {
+        "file": "songs/Next Semester.mp3",
+        "title": "Next Semester",
+        "duration": 235,
+        "lrc": "lrc/Next Semester.lrc"
+      },
+      {
+        "file": "songs/Backslide.mp3",
+        "title": "Backslide",
+        "duration": 180,
+        "lrc": "lrc/Backslide.lrc"
+      },
+      {
+        "file": "songs/Midwest Indigo.mp3",
+        "title": "Midwest Indigo",
+        "duration": 197,
+        "lrc": "lrc/Midwest Indigo.lrc"
+      },
+      {
+        "file": "songs/Routines In The Night.mp3",
+        "title": "Routines In The Night",
+        "duration": 203,
+        "lrc": "lrc/Routines In The Night.lrc"
+      },
+      {
+        "file": "songs/Vignette.mp3",
+        "title": "Vignette",
+        "duration": 203,
+        "lrc": "lrc/Vignette.lrc"
+      },
+      {
+        "file": "songs/The Craving (Jenna's Version).mp3",
+        "title": "The Craving (Jenna's Version)",
+        "duration": 175,
+        "lrc": "lrc/The Craving (Jenna's Version).lrc"
+      },
+      {
+        "file": "songs/Lavish.mp3",
+        "title": "Lavish",
+        "duration": 159,
+        "lrc": "lrc/Lavish.lrc"
+      },
+      {
+        "file": "songs/Navigating.mp3",
+        "title": "Navigating",
+        "duration": 224,
+        "lrc": "lrc/Navigating.lrc"
+      },
+      {
+        "file": "songs/Snap Back.mp3",
+        "title": "Snap Back",
+        "duration": 211,
+        "lrc": "lrc/Snap Back.lrc"
+      },
+      {
+        "file": "songs/Oldies Station.mp3",
+        "title": "Oldies Station",
+        "duration": 228,
+        "lrc": "lrc/Oldies Station.lrc"
+      },
+      {
+        "file": "songs/At The Risk Of Feeling Dumb.mp3",
+        "title": "At The Risk Of Feeling Dumb",
+        "duration": 204,
+        "lrc": "lrc/At The Risk Of Feeling Dumb.lrc"
+      },
+      {
+        "file": "songs/Paladin Strait.mp3",
+        "title": "Paladin Strait",
+        "duration": 389,
+        "lrc": "lrc/Paladin Strait.lrc"
+      }
+    ]
+  },
+  {
+    "id": "breach",
+    "title": "Breach",
+    "year": 2025,
+    "cover": "covers/Breach.png",
+    "tracks": [
+      {
+        "file": "songs/City Walls.mp3",
+        "title": "City Walls",
+        "duration": 323,
+        "lrc": "lrc/City Walls.lrc"
+      },
+      {
+        "file": "songs/RAWFEAR.mp3",
+        "title": "RAWFEAR",
+        "duration": 203,
+        "lrc": "lrc/RAWFEAR.lrc"
+      },
+      {
+        "file": "songs/Drum Show.mp3",
+        "title": "Drum Show",
+        "duration": 204,
+        "lrc": "lrc/Drum Show.lrc"
+      },
+      {
+        "file": "songs/Garbage.mp3",
+        "title": "Garbage",
+        "duration": 197,
+        "lrc": "lrc/Garbage.lrc"
+      },
+      {
+        "file": "songs/The Contract.mp3",
+        "title": "The Contract",
+        "duration": 226,
+        "lrc": "lrc/The Contract.lrc"
+      },
+      {
+        "file": "songs/Downstairs.mp3",
+        "title": "Downstairs",
+        "duration": 327,
+        "lrc": "lrc/Downstairs.lrc"
+      },
+      {
+        "file": "songs/Robot Voices.mp3",
+        "title": "Robot Voices",
+        "duration": 238,
+        "lrc": "lrc/Robot Voices.lrc"
+      },
+      {
+        "file": "songs/Center Mass.mp3",
+        "title": "Center Mass",
+        "duration": 229,
+        "lrc": "lrc/Center Mass.lrc"
+      },
+      {
+        "file": "songs/Cottonwood.mp3",
+        "title": "Cottonwood",
+        "duration": 189,
+        "lrc": "lrc/Cottonwood.lrc"
+      },
+      {
+        "file": "songs/One Way.mp3",
+        "title": "One Way",
+        "duration": 164,
+        "lrc": "lrc/One Way.lrc"
+      },
+      {
+        "file": "songs/Days Lie Dormant.mp3",
+        "title": "Days Lie Dormant",
+        "duration": 207,
+        "lrc": "lrc/Days Lie Dormant.lrc"
+      },
+      {
+        "file": "songs/Tally.mp3",
+        "title": "Tally",
+        "duration": 213,
+        "lrc": "lrc/Tally.lrc"
+      },
+      {
+        "file": "songs/Intentions.mp3",
+        "title": "Intentions",
+        "duration": 136,
+        "lrc": "lrc/Intentions.lrc"
+      }
+    ]
+  }
+]

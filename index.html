@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21Pilots Player</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-music logo-icon"></i>
+                <div class="logo-text">21PILOTS PLAYER</div>
+            </div>
+            
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="search-input" placeholder="Search for songs or albums...">
+            </div>
+            
+            <div class="header-actions">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+
+            <button class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </header>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="nav-section">
+                    <ul class="nav-links">
+                        <li class="nav-link active" data-view="home">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </li>
+                        <li class="nav-link" data-view="search">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </li>
+                        <li class="nav-link" data-view="liked">
+                            <i class="fas fa-heart"></i>
+                            <span>Liked Songs</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="playlists" id="user-playlists">
+                    <!-- User playlists will be added here -->
+                </div>
+            </div>
+            
+            <div class="content-area">
+                <div class="section-header">
+                    <h1 class="section-title" id="page-title">Home</h1>
+                    <div class="sort-options" id="sort-options">
+                        <button class="sort-btn" id="sort-name-asc" title="Sort A-Z">
+                            <i class="fas fa-arrow-up-a-z"></i>
+                        </button>
+                        <button class="sort-btn" id="sort-name-desc" title="Sort Z-A">
+                            <i class="fas fa-arrow-down-a-z"></i>
+                        </button>
+                        <button class="sort-btn" id="sort-year-asc" title="Sort Oldest First">
+                            <i class="fas fa-calendar-plus"></i>
+                        </button>
+                        <button class="sort-btn" id="sort-year-desc" title="Sort Newest First">
+                            <i class="fas fa-calendar-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="albums-grid" id="albums-container">
+                    <!-- Albums will be populated by JavaScript -->
+                </div>
+                
+                <div class="album-detail-view hidden" id="album-detail-view">
+                    <div class="album-header">
+                        <img src="" alt="Album Cover" class="album-detail-cover" id="album-detail-cover">
+                        <div class="album-info">
+                            <h1 class="album-title" id="album-detail-title"></h1>
+                            <p class="album-meta" id="album-detail-meta"></p>
+                            <div class="album-actions">
+                                <button class="btn btn-primary" id="play-album-btn">
+                                    <i class="fas fa-play"></i> Play
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tracks-list" id="tracks-list">
+                        <!-- Tracks will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="search-results hidden" id="search-results">
+                    <h2 class="results-title">Search Results</h2>
+                    <div class="search-tracks" id="search-tracks-container">
+                        <!-- Search results will be populated here -->
+                    </div>
+                </div>
+                
+                <div class="liked-songs-view hidden" id="liked-songs-view">
+                    <div class="album-header">
+                        <img src="covers/liked.png" alt="Liked Songs" class="album-detail-cover">
+                        <div class="album-info">
+                            <h1 class="album-title">Liked Songs</h1>
+                            <p class="album-meta" id="liked-songs-count"></p>
+                        </div>
+                    </div>
+                    <div class="tracks-list" id="liked-tracks-list">
+                        <!-- Liked tracks will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="player-container">
+            <div class="now-playing">
+                <img src="covers/default_cover.png" alt="Now Playing" class="now-cover" id="now-cover">
+                <div class="track-info">
+                    <div class="track-title" id="now-title">Select a track to play</div>
+                    <div class="track-artist" id="now-artist">Album Title</div>
+                </div>
+                <button class="control-btn like-btn" id="like-track-btn">
+                    <i class="far fa-heart"></i>
+                </button>
+            </div>
+            
+            <div class="player-controls">
+                <div class="control-buttons">
+                    <button class="control-btn" id="shuffle-btn">
+                        <i class="fas fa-random"></i>
+                    </button>
+                    <button class="control-btn" id="prev-btn">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button class="control-btn play-pause-btn" id="play-pause-btn">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="control-btn" id="next-btn">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                    <button class="control-btn" id="repeat-btn">
+                        <i class="fas fa-repeat"></i>
+                    </button>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="time" id="current-time">0:00</div>
+                    <div class="progress-bar" id="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                    <div class="time" id="duration">0:00</div>
+                </div>
+            </div>
+            
+            <div class="volume-controls">
+                <button class="control-btn" id="queue-btn">
+                    <i class="fas fa-list"></i>
+                </button>
+                <button class="control-btn" id="lyrics-btn">
+                    <i class="fas fa-align-center"></i>
+                </button>
+                <i class="fas fa-volume-up"></i>
+                <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="80">
+            </div>
+        </div>
+        
+        <div class="lyrics-panel" id="lyrics-panel">
+            <div class="panel-header">
+                <div class="panel-title">Lyrics</div>
+                <button class="close-panel" id="close-lyrics">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="lyrics-container" id="lyrics-container">
+                <!-- Lyrics will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="queue-panel" id="queue-panel">
+            <div class="panel-header">
+                <div class="panel-title">Queue</div>
+                <button class="close-panel" id="close-queue">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="queue-container" id="queue-container">
+                <!-- Queue items will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Context Menu for Track Actions -->
+        <div class="context-menu hidden" id="context-menu">
+            <div class="context-item" id="add-to-queue-btn">
+                <i class="fas fa-plus"></i> Add to Queue
+            </div>
+            <div class="context-item" id="like-from-context-btn">
+                <i class="far fa-heart"></i> Like Song
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
